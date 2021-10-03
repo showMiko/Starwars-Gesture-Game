@@ -7,7 +7,6 @@ import time
 import mediapipe
 import os 
 import Trackinghandmod as htm
-
 # from playsound import playsound
 pygame.init()  # initialization of the pygame
 mixer.init()
@@ -22,8 +21,8 @@ pygame.display.set_icon(icon)
 
 #background
 background = pygame.image.load("background.png")
-# mixer.music.load("Star Wars Main Theme (Full).mp3")
-# mixer.music.play(-1)
+mixer.music.load("Star Wars Main Theme (Full).mp3")
+mixer.music.play(-1)
 
 
 
@@ -152,8 +151,8 @@ while running:
                 if sharingan_state is "ready":
                     sharinganx = playerx
                     sharingan(sharinganx, sharingany)
-                    # sharingan_sound=mixer.Sound("Star Wars stardestroyer blaster sound effect 3.mp3")
-                    # sharingan_sound.play()
+                    sharingan_sound=mixer.Sound("Star Wars stardestroyer blaster sound effect 3.mp3")
+                    sharingan_sound.play()
 
         #if event.type == pygame.KEYUP:
         if totfinger==0:
@@ -220,8 +219,8 @@ while running:
             score_value+=1
             enemyx[i] = random.randint(0, 735)
             enemyy[i] = random.randint(50, 150)
-            # explosion_sound = mixer.Sound("Star Wars Blaster Sound Effect.mp3")
-            # explosion_sound.play()
+            explosion_sound = mixer.Sound("Star Wars Blaster Sound Effect.mp3")
+            explosion_sound.play()
 
 
         enemy(enemyx[i], enemyy[i], i)
