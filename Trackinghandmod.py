@@ -3,15 +3,19 @@ import mediapipe as mp
 import time
 
 class handdetector():
-    def __init__(self,mode=False,maxHands=2,detectionconfi=0.5,trackconfi=0.5):
+    def __init__(self,mode=False,maxHands=2,modelC=1,detectionconfi=0.5,trackconfi=0.5):
         self.mode=mode
         self.maxhands=maxHands
+        self.modelC = modelC
         self.detec=detectionconfi
         self.track=trackconfi
 
+
         self.mphands=mp.solutions.hands
-        self.hands=self.mphands.Hands(self.mode,self.maxhands,self.detec,self.track)
+        self.hands=self.mphands.Hands(self.mode,self.maxhands,self.modelC ,self.detec,self.track)
         self.mpdraw=mp.solutions.drawing_utils
+
+        self.tipidd=[4,8,12,16,20]
 
     def findhand(self,img,draw=True):      
 
@@ -26,7 +30,7 @@ class handdetector():
         return img
     
     def findposition(self,img,handno=0,draw=True):
-        lmlist=[]
+        self.lmlist=[]
         if self.results.multi_hand_landmarks:
             myhand=self.results.multi_hand_landmarks[handno]
 
@@ -34,12 +38,46 @@ class handdetector():
                 h,w,c=img.shape
                 cx,cy=int(lm.x*w),int(lm.y*h)
 
-                lmlist.append([id,cx,cy])
+                self.lmlist.append([id,cx,cy])
                 if draw:
-                    cv2.circle(img,(cx,cy),(5),(255,253,0),cv2.FILLED)
+                    cv2.circle(img,(cx,cy),(5),(120,253,0),cv2.FILLED)
 
-        return lmlist
+        return self.lmlist
     
+    def finggersup(self):
+        fingers=[]       
+        #For thumb
+        
+        if self.lmlist[self.tipidd[0]][1]<self.lmlist[self.tipidd [0]-1]  [1]    :
+            fingers.append(0)
+        else:
+            fingers.append(1)
+          
+        #for remaining fingers 
+        for id in range(1,5):
+            if self.lmlist[self.tipidd[id]][2]< self.lmlist[self.tipidd[id]-2][2]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        return fingers
+
+    def finggersup_rev(self):
+        fingers=[]       
+        #For thumb
+        
+        if self.lmlist[self.tipidd[0]][1]>self.lmlist[self.tipidd [0]-1]  [1]    :
+            fingers.append(0)
+        else:
+            fingers.append(1)
+          
+        #for remaining fingers 
+        for id in range(1,5):
+            if self.lmlist[self.tipidd[id]][2]< self.lmlist[self.tipidd[id]-2][2]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        return fingers
+
 def main():
     ptime=0
     ctime=0
